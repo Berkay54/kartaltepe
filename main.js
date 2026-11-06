@@ -91,7 +91,11 @@
     var cur = document.querySelector('.cur'), curText = cur.querySelector('span');
     var cx = gsap.quickTo(cur, 'x', { duration: 0.35, ease: 'power3' });
     var cy = gsap.quickTo(cur, 'y', { duration: 0.35, ease: 'power3' });
-    window.addEventListener('pointermove', function (e) { cx(e.clientX); cy(e.clientY); }, { passive: true });
+    window.addEventListener('pointermove', function (e) {
+      if (!cur.classList.contains('on')) { gsap.set(cur, { x: e.clientX, y: e.clientY }); cur.classList.add('on'); }
+      cx(e.clientX); cy(e.clientY);
+    }, { passive: true });
+    document.documentElement.addEventListener('pointerleave', function () { cur.classList.remove('on'); });
     document.addEventListener('pointerover', function (e) {
       var lab = e.target.closest('[data-cursor]');
       var lnk = e.target.closest('a,button,input,select,textarea,label');
